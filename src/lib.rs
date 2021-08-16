@@ -2,6 +2,7 @@
 ///
 /// https://github.com/qg-cpt-marseille/sl2cfoam-next
 use num::complex::Complex;
+use std::f64::consts::PI;
 
 const G: f64 = 43.1;
 const LANCZOS_COEFFICIENTS: [f64; 42] = [
@@ -55,16 +56,27 @@ pub struct ComplexGamma {
 
 impl ComplexGamma {
     pub fn value(self) -> Complex<f64> {
-        let ComplexGamma { z } = self;
+        let z_target;
+        if self.z.re > 0.0 {
+            z_target = self.z - 1.0;
+        } else {
+            z_target = -self.z;
+        }
+
         let mut zp = Complex {
             re: LANCZOS_COEFFICIENTS[0],
             im: 0.0,
         };
-        let z_minus1 = z - 1.0;
         for i in 1..LANCZOS_COEFFICIENTS.len() {
-            zp += LANCZOS_COEFFICIENTS[i] / (z_minus1 + i as f64);
+            zp += LANCZOS_COEFFICIENTS[i] / (z_target + i as f64);
         }
-        let pow = zp.ln() + (z_minus1 + 0.5) * (z_minus1 + 0.5 + G).ln() - (z_minus1 + 0.5 + G);
-        pow.exp()
+        let pow = zp.ln() + (z_target + 0.5) * (z_target + 0.5 + G).ln() - (z_target + 0.5 + G);
+        let gamma_tmp = pow.exp();
+
+        if self.z.re > 0.0 {
+            gamma_tmp
+        } else {
+            PI / (gamma_tmp * (PI * self.z).sin())
+        }
     }
 }

@@ -10,8 +10,10 @@ use rstest::rstest;
 #[case(Complex {re: 4.0, im: 0.0}, Complex {re: 6.0, im: 0.0}, -9)]
 #[case(Complex {re: 5.0, im: 0.0}, Complex {re: 24.0, im: 0.0}, -7)]
 #[case(Complex {re: 6.0, im: 0.0}, Complex {re: 120.0, im: 0.0}, -5)]
-#[case(Complex {re: 1.0, im: 1.0}, Complex {re: 0.498, im: -0.152}, -2)]
+#[case(Complex {re: 1.0, im: 1.0}, Complex {re: 0.49802, im: -0.15495}, -2)]
 #[case(Complex {re: 10.0, im: 5.0}, Complex {re: 47216.0, im: -91468.0}, 1)]
+#[case(Complex {re: -1.0, im: 1.0}, Complex {re: -0.17153, im: 0.32648}, -5)]
+#[case(Complex {re: -2.0, im: 3.0}, Complex {re: -0.00016317, im: 0.0011285}, -7)]
 fn test_complex_gamma(
     #[case] z: Complex<f64>,
     #[case] expected: Complex<f64>,
